@@ -1,25 +1,30 @@
 'use client'
 
-import { ContactShadows, Environment, OrbitControls, PerspectiveCamera, Stars, useScroll, MeshReflectorMaterial, useTexture } from "@react-three/drei"
+import { useEffect, useRef, useState, useMemo } from "react"
+
+// 3D Models
 import { Hisoka } from "./Hisoka"
-import { useEffect, useRef } from "react"
-import { randFloatSpread } from "three/src/math/MathUtils";
+import { Gon } from './Gon'
+import { FarTree } from "./FarTree";
 
-import { useFrame } from "@react-three/fiber"
-import { easing } from "maath"
-import * as THREE from "three";
-import { Tree } from "./Tree"
-import { Lamp } from "./Lamp"
-import { useControls } from "leva"
-import { Torii } from "./Torii";
+// R3F drei, & THRRE.js 
+import { useFrame, useThree } from "@react-three/fiber";
 
+import { ContactShadows, Environment, OrbitControls, Stars, MeshReflectorMaterial, useTexture, MeshPortalMaterial, RoundedBox, Text, Html, Text3D, Center, CameraControls } from "@react-three/drei"
 
 import { Instance, Instances } from "@react-three/drei";
 import { AdditiveBlending, DoubleSide, MathUtils } from "three";
-import { FarTree } from "./FarTree";
-import { Moon } from "./Moon";
+
+import * as THREE from "three";
+
+import { useControls } from "leva"
+
+import { randFloatSpread } from "three/src/math/MathUtils";
+
+import { easing } from "maath"
 
 
+// Components 
 
 import { DissolveMaterial } from "./DissolveMaterial";
 import { Water } from "./Water";
@@ -27,26 +32,14 @@ import { Water } from "./Water";
 
 // Variables 
 const OFFSET_X = 20;
-const LAMPS_NB = 10;
-const LAMPS_SPEED = 0.8;
-
 const TRESS_NB = 16;
-const TREES_SPEED = 0.4;
-
-const FARTRESS_NB = 12;
-const FAR_TREES_SPEED = 15;
-
-const TORI_NB = 5;
-const TORI_SPEED = 2;
-
+const TREES_SPEED = 15;
 
 const RANDOMIZER_STRENGTH_SCALE = 0.42;
 const RANDOMIZER_STRENGTH_POSITION = 1;
 
 
 export const Experience = () => {
-
-
 
     const Ground = (props) => {
 
@@ -99,7 +92,6 @@ export const Experience = () => {
         )
     }
 
-
     const MovingItem = (props) => {
 
         const ref = useRef();
@@ -126,26 +118,17 @@ export const Experience = () => {
         return <group ref={ref}>{props.children} </group>
     }
 
-    const cameraGroup = useRef();
+    const characterGroup = useRef();
 
-    const { lampsNb, lampsSpeed, treesNb, treesSpeed, farTreesNb, farTreesSpeed, toriNb, toriSpeed, color, groundColor } = useControls({
+    const { treesNb, treesSpeed, color, groundColor, fogColor, fogNear, fogFar } = useControls({
         color: {
             value: 'black'
         },
         groundColor: {
             value: [0.015, 0.015, 0.015]
         },
-        lampsNb: {
-            value: LAMPS_NB,
-            min: 1,
-            max: 100,
-            step: 1
-        },
-        lampsSpeed: {
-            value: LAMPS_SPEED,
-            min: 0.1,
-            max: 2,
-            step: 0.05,
+        fogColor: {
+            value: 'black'
         },
         treesNb: {
             value: TRESS_NB,
@@ -156,36 +139,30 @@ export const Experience = () => {
         treesSpeed: {
             value: TREES_SPEED,
             min: 0.1,
-            max: 2,
+            max: 50,
             step: 0.05,
         },
-        farTreesNb: {
-            value: FARTRESS_NB,
+        fogNear: {
+            value: 12,
             min: 1,
             max: 100,
             step: 1
         },
-        farTreesSpeed: {
-            value: FAR_TREES_SPEED,
-            min: 0.1,
-            max: 50,
-            step: 0.01,
-        },
-        toriNb: {
-            value: TORI_NB,
+        fogFar: {
+            value: 30,
             min: 1,
             max: 100,
             step: 1
         },
-        toriSpeed: {
-            value: TORI_SPEED,
-            min: 0.1,
-            max: 2,
-            step: 0.01,
-        }
+
     })
 
-    const basicMaterial = new THREE.MeshStandardMaterial({ color: 'white' })
+    // Move character on mouse movement
+    useFrame((state, delta) => {
+        let z = state.mouse.x * 4
+        characterGroup.current.position.z = -z
+    })
+
 
     return (
         <>
@@ -203,11 +180,12 @@ export const Experience = () => {
             <ambientLight intensity={0.2} />
             <Environment preset="city" intensity={0.4} blur={0.8} />
             <color attach="background" args={[color]} />
-            {/* <fog attach="fog" args={["black", 12, 30]} /> */}
+            <fog attach="fog" args={[fogColor, fogNear, fogFar]} />
 
-            <Water position={[7, -2, 60]}  />
+            {/* <Water position={[7, -2, 60]}  /> */}
+
             {/* Scene */}
-            <group position={[0, 0, 0]} ref={cameraGroup} >
+            <group position={[0, 0, 0]} >
 
                 <mesh position={[0, 0, 0]} rotation={[-Math.PI / 2, 0, 0]}>
                     <planeGeometry args={[50, 50]} />
@@ -236,34 +214,39 @@ export const Experience = () => {
                     {/* <DissolveMaterial baseMaterial={boxMaterial} /> */}
                 </mesh>
 
-                <spotLight
-                    color={[1, 0.25, 0.7]}
-                    intensity={20}
-                    angle={0.6}
-                    penumbra={0.5}
-                    position={[0, 5, 0]}
-                    castShadow
-                    shadow-bias={-0.0001}
-                />
-                <spotLight
-                    color={[0.14, 0.5, 1]}
-                    intensity={20}
-                    angle={0.6}
-                    penumbra={0.5}
-                    position={[-5, 5, 0]}
-                    castShadow
-                    shadow-bias={-0.0001}
-                />
+
+                <group ref={characterGroup}  >
+
+                    <spotLight
+                        color={[1, 0.25, 0.7]}
+                        intensity={20}
+                        angle={0.6}
+                        penumbra={0.5}
+                        position={[0, 5, 0]}
+                        castShadow
+                        shadow-bias={-0.0001}
+                    />
+                    <spotLight
+                        color={[0.14, 0.5, 1]}
+                        intensity={20}
+                        angle={0.6}
+                        penumbra={0.5}
+                        position={[-5, 5, 0]}
+                        castShadow
+                        shadow-bias={-0.0001}
+                    />
 
 
-                <Hisoka rotation-y={-Math.PI / 2} />
-                <Speed />
+                    <Hisoka rotation-y={-Math.PI / 2} />
+                    <Speed />
+
+                </group>
 
                 {[...Array(treesNb)].map((_v, index) => {
                     return (
                         <MovingItem
                             key={index}
-                            speed={farTreesSpeed}
+                            speed={treesSpeed}
                             randomizePosition
                             randomizeScale
                         >
@@ -271,6 +254,21 @@ export const Experience = () => {
                         </MovingItem>
                     )
                 })}
+
+                {/* Another World */}
+                <group position={[-15, 7, 7]}>
+                    <NFTCard
+                        name="Perverted Hisoka"
+                        color="#ffa997"
+                        texture={"textures/cloudy.jpeg"}
+                        position-x={3}
+                        rotation-y={-Math.PI / 8}
+                    >
+
+                        <Gon position-y={-1} position-x={0.2} rotation-y={2.5} scale={[3, 3, 3]} />
+                    </NFTCard>
+
+                </group>
 
                 <ContactShadows opacity={0.42} scale={[16, 16]} />
             </group>
@@ -342,6 +340,76 @@ export const Speed = () => {
                         <SpeedShape key={key} />
                     ))}
             </Instances>
+        </group>
+    );
+};
+
+
+
+const NFTCard = ({
+    children,
+    texture,
+    name,
+    color,
+    q = new THREE.Quaternion(),
+    p = new THREE.Vector3(),
+    ...props
+}) => {
+
+    const [active, setActive] = useState(false)
+    const ref = useRef();
+    const map = useTexture(texture);
+    const portalMaterial = useRef();
+
+    useFrame((_state, delta) => {
+        const worldOpen = active === name;
+        easing.damp(portalMaterial.current, "blend", worldOpen ? 1 : 0, 0.2, delta);
+    });
+
+
+    const { textPosition, textRotation, textColor } = useControls({
+        textColor: {
+            value: 'black'
+        },
+        textPosition: {
+            value: [2, -4, -1]
+        },
+        textRotation: {
+            value: [0, 3.1, 0]
+        },
+    })
+
+    return (
+        <group  {...props}>
+
+            <Text
+                font="fonts/Caprasimo-Regular.ttf"
+                fontSize={1.15}
+                position={textPosition}
+                rotation={textRotation}
+                anchorY={"top"}
+            >
+                {name}
+                <meshBasicMaterial color={color} toneMapped={false} />
+            </Text>
+            <RoundedBox
+                ref={ref}
+                name={name}
+                args={[10, 5, 0.1]}
+                onClick={() => setActive(!active)} onPointerMissed={() => setActive(false)}
+            >
+                <MeshPortalMaterial ref={portalMaterial} side={THREE.DoubleSide} onClick={() => setActive(!active)} onPointerMissed={() => setActive(false)}
+                >
+                    <ambientLight intensity={1} />
+                    <Environment preset="sunset" />
+                    {children}
+                    <mesh>
+                        <sphereGeometry args={[5, 64, 64]} />
+                        <meshStandardMaterial map={map} side={THREE.BackSide} />
+                    </mesh>
+                </MeshPortalMaterial>
+            </RoundedBox>
+
         </group>
     );
 };

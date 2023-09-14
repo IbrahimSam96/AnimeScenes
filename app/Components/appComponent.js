@@ -14,8 +14,8 @@ export default function AppComponent() {
 
     return (
         <>
-            <Leva />
-            <Canvas className={`col-start-1 col-span-8 row-start-1`} shadows camera={{ position: [4, 7, 13], fov: 60 }}  >
+            <Leva hidden />
+            <Canvas className={`col-start-1 col-span-8 row-start-1`} shadows camera={{ position: [13, 7, 10], fov: 60 }}  >
                 <EffectComposer>
                     <Bloom
                         mipmapBlur
@@ -25,7 +25,7 @@ export default function AppComponent() {
                     />
                 </EffectComposer>
                 <Suspense>
-                    <CameraControls />
+                    {/* <CameraControls /> */}
                     <Experience />
                 </Suspense>
             </Canvas>
