@@ -10,7 +10,7 @@ import { FarTree } from "./FarTree";
 // R3F drei, & THRRE.js 
 import { useFrame, useThree } from "@react-three/fiber";
 
-import { ContactShadows, Environment, OrbitControls, Stars, MeshReflectorMaterial, useTexture, MeshPortalMaterial, RoundedBox, Text, Html, Text3D, Center, CameraControls } from "@react-three/drei"
+import { ContactShadows, Environment, OrbitControls, Stars, MeshReflectorMaterial, useTexture, MeshPortalMaterial, RoundedBox, Text, Html, Text3D, Center, CameraControls, useProgress } from "@react-three/drei"
 
 import { Instance, Instances } from "@react-three/drei";
 import { AdditiveBlending, DoubleSide, MathUtils } from "three";
@@ -39,7 +39,7 @@ const RANDOMIZER_STRENGTH_SCALE = 0.42;
 const RANDOMIZER_STRENGTH_POSITION = 1;
 
 
-export const Experience = () => {
+export const Experience = ({ started }) => {
 
     const Ground = (props) => {
 
@@ -163,6 +163,20 @@ export const Experience = () => {
         characterGroup.current.position.z = -z
     })
 
+    const { progress } = useProgress();
+
+
+    useEffect(() => {
+        // Play SoundTrack on enter
+        const audio = new Audio(`./sounds/Hisoka.mp3`);
+
+        if (started) {
+            audio.play();
+
+        }
+
+    }, [started])
+    
 
     return (
         <>
@@ -256,7 +270,7 @@ export const Experience = () => {
                 })}
 
                 {/* Another World */}
-                <group position={[-15, 7, 7]}>
+                <group position={[-14, 7, 7]}>
                     <NFTCard
                         name="Perverted Hisoka"
                         color="#ffa997"
@@ -267,7 +281,6 @@ export const Experience = () => {
 
                         <Gon position-y={-1} position-x={0.2} rotation-y={2.5} scale={[3, 3, 3]} />
                     </NFTCard>
-
                 </group>
 
                 <ContactShadows opacity={0.42} scale={[16, 16]} />
@@ -344,8 +357,6 @@ export const Speed = () => {
     );
 };
 
-
-
 const NFTCard = ({
     children,
     texture,
@@ -372,7 +383,7 @@ const NFTCard = ({
             value: 'black'
         },
         textPosition: {
-            value: [2, -4, -1]
+            value: [0, -3, -0.5]
         },
         textRotation: {
             value: [0, 3.1, 0]
@@ -395,7 +406,7 @@ const NFTCard = ({
             <RoundedBox
                 ref={ref}
                 name={name}
-                args={[10, 5, 0.1]}
+                args={[9.5, 5, 0.1]}
                 onClick={() => setActive(!active)} onPointerMissed={() => setActive(false)}
             >
                 <MeshPortalMaterial ref={portalMaterial} side={THREE.DoubleSide} onClick={() => setActive(!active)} onPointerMissed={() => setActive(false)}
