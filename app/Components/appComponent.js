@@ -32,7 +32,7 @@ export default function AppComponent() {
 
             <LoadingScreeen started={started} setStarted={setStarted} />
 
-            {/* <Loader /> */}
+            <Loader />
         </>
     )
 }
@@ -47,13 +47,13 @@ export const LoadingScreeen = ({ started, setStarted }) => {
         <div className={`menu col-start-1 col-span-8 row-start-1 transition-all duration-1000 ease-in-out ${started ? 'hidden opacity-0 pointer-events-none' : 'grid'} `}>
 
             <button onClick={() => {
-                if (progress > 100) {
+                if (progress < 100) {
                     // Do Nothing
                 }
                 else {
                     setStarted(true)
                 }
-            }} disabled={progress > 100}
+            }} disabled={progress < 100}
                 className={`bg-[rgb(215,186,223,60%)] px-10 py-6 font-extrabold text-white rounded-[4px] border-none self-center justify-self-center transition-all duration-500 hover:bg-[#fffffff5] hover:text-black hover:cursor-pointer`}>
                 Start
             </button>

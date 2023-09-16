@@ -270,7 +270,7 @@ export const Experience = ({ started }) => {
                 })}
 
                 {/* Another World */}
-                <group position={[-14, 7, 7]}>
+                <group position={[-11, 5, 7]}>
                     <NFTCard
                         name="Perverted Hisoka"
                         color="#ffa997"
