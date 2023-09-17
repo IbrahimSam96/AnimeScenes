@@ -12,7 +12,7 @@ export default function AppComponent() {
 
     const [started, setStarted] = useState(false);
         // Play SoundTrack on enter
-        const audio = new Audio(`./sounds/Hisoka.mp3`);
+        const audio = new Audio(`./sounds/Hisoka.mp3`)
 
     return (
         <>
