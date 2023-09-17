@@ -120,12 +120,15 @@ export const Experience = ({ started }) => {
 
     const characterGroup = useRef();
 
-    const { treesNb, treesSpeed, color, groundColor, fogColor, fogNear, fogFar } = useControls({
+    const { treesNb, treesSpeed, color, groundColor, fogColor, fogNear, fogFar, gonPosition } = useControls({
         color: {
             value: 'black'
         },
         groundColor: {
             value: [0.015, 0.015, 0.015]
+        },
+        gonPosition: {
+            value: [-11, 5, 5]
         },
         fogColor: {
             value: 'black'
@@ -255,7 +258,7 @@ export const Experience = ({ started }) => {
                 })}
 
                 {/* Another World */}
-                <group position={[-11, 5, 5]}>
+                <group position={gonPosition}>
                     <NFTCard
                         name="Perverted Hisoka"
                         color="#dfbcd5"
