@@ -11,10 +11,12 @@ import { Bloom, EffectComposer } from "@react-three/postprocessing";
 export default function AppComponent() {
 
     const [started, setStarted] = useState(false);
+        // Play SoundTrack on enter
+        const audio = new Audio(`./sounds/Hisoka.mp3`);
 
     return (
         <>
-            <Leva hidden />
+            <Leva  />
 
             <Canvas className={`col-start-1 col-span-8 row-start-1`} shadows camera={{ position: [13, 7, 10], fov: 60 }}  >
                 <EffectComposer>
@@ -30,7 +32,7 @@ export default function AppComponent() {
                 </Suspense>
             </Canvas>
 
-            <LoadingScreeen started={started} setStarted={setStarted} />
+            <LoadingScreeen audio={audio} started={started} setStarted={setStarted} />
 
             <Loader />
         </>
@@ -38,7 +40,7 @@ export default function AppComponent() {
 }
 
 
-export const LoadingScreeen = ({ started, setStarted }) => {
+export const LoadingScreeen = ({ started, setStarted, audio }) => {
 
     const { progress } = useProgress();
 
@@ -52,6 +54,7 @@ export const LoadingScreeen = ({ started, setStarted }) => {
                 }
                 else {
                     setStarted(true)
+                    audio.play()
                 }
             }} disabled={progress < 100}
                 className={`bg-[rgb(215,186,223,60%)] px-10 py-6 font-extrabold text-white rounded-[4px] border-none self-center justify-self-center transition-all duration-500 hover:bg-[#fffffff5] hover:text-black hover:cursor-pointer`}>

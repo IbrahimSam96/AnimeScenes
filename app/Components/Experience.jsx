@@ -163,24 +163,11 @@ export const Experience = ({ started }) => {
         characterGroup.current.position.z = -z
     })
 
-    const { progress } = useProgress();
-
-    // Play SoundTrack on enter
-    const audio = new Audio(`./sounds/Hisoka.mp3`);
-
-    // useEffect(() => {
-
-    //     if (started) {
-    //         audio.play();
-    //     }
-    // }, [started])
-
-
     return (
         <>
             <OrbitControls
-                minAzimuthAngle={-Math.PI / 2}
-                maxAzimuthAngle={Math.PI / 2}
+                minAzimuthAngle={-Math.PI / 2} // Right
+                maxAzimuthAngle={Math.PI / 1.5} //Left
                 minPolarAngle={0}
                 maxPolarAngle={Math.PI / 2}
                 // minDistance={2}
@@ -268,14 +255,13 @@ export const Experience = ({ started }) => {
                 })}
 
                 {/* Another World */}
-                <group position={[-11, 5, 7]}>
+                <group position={[-11, 5, 5]}>
                     <NFTCard
                         name="Perverted Hisoka"
-                        color="#ffa997"
+                        color="#dfbcd5"
                         texture={"textures/cloudy.jpeg"}
                         position-x={3}
                         rotation-y={-Math.PI / 8}
-                        audio={audio}
                     >
 
                         <Gon position-y={-1} position-x={0.2} rotation-y={2.5} scale={[3, 3, 3]} />
@@ -361,7 +347,6 @@ const NFTCard = ({
     texture,
     name,
     color,
-    audio,
     q = new THREE.Quaternion(),
     p = new THREE.Vector3(),
     ...props
@@ -406,10 +391,11 @@ const NFTCard = ({
             <RoundedBox
                 ref={ref}
                 name={name}
-                args={[9.5, 5, 0.1]}
+                args={[8.5, 5, 0.1]}
                 onClick={() => {
-                    audio.play()
-                }} onPointerMissed={() => setActive(false)}
+                    // do nothing 
+                }}
+                onPointerMissed={() => setActive(false)}
             >
                 <MeshPortalMaterial ref={portalMaterial} side={THREE.DoubleSide} onClick={() => setActive(!active)} onPointerMissed={() => setActive(false)}
                 >
