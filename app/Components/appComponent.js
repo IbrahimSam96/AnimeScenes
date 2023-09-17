@@ -11,12 +11,17 @@ import { Bloom, EffectComposer } from "@react-three/postprocessing";
 export default function AppComponent() {
 
     const [started, setStarted] = useState(false);
-        // Play SoundTrack on enter
-        const audio = new Audio(`./sounds/Hisoka.mp3`)
+    // Play SoundTrack on enter
+    const [audio, setAudio] = useState(null)
+    useEffect(() => {
+        let URL = `./sounds/Hisoka.mp3`
+        setAudio(new Audio(URL))
+        // only run once on the first render on the client
+    }, [])
 
     return (
         <>
-            <Leva  />
+            <Leva />
 
             <Canvas className={`col-start-1 col-span-8 row-start-1`} shadows camera={{ position: [13, 7, 10], fov: 60 }}  >
                 <EffectComposer>
