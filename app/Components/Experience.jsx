@@ -170,13 +170,16 @@ export const Experience = ({ started }) => {
         // Play SoundTrack on enter
         const audio = new Audio(`./sounds/Hisoka.mp3`);
 
-        if (started) {
-            audio.play();
+        console.log(audio.currentTime)
 
+        if (started) {
+            audio.autoplay = true;
+            audio.play();
         }
 
+
     }, [started])
-    
+
 
     return (
         <>
