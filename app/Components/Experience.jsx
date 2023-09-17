@@ -165,20 +165,15 @@ export const Experience = ({ started }) => {
 
     const { progress } = useProgress();
 
+    // Play SoundTrack on enter
+    const audio = new Audio(`./sounds/Hisoka.mp3`);
 
-    useEffect(() => {
-        // Play SoundTrack on enter
-        const audio = new Audio(`./sounds/Hisoka.mp3`);
+    // useEffect(() => {
 
-        console.log(audio.currentTime)
-
-        if (started) {
-            audio.autoplay = true;
-            audio.play();
-        }
-
-
-    }, [started])
+    //     if (started) {
+    //         audio.play();
+    //     }
+    // }, [started])
 
 
     return (
@@ -280,6 +275,7 @@ export const Experience = ({ started }) => {
                         texture={"textures/cloudy.jpeg"}
                         position-x={3}
                         rotation-y={-Math.PI / 8}
+                        audio={audio}
                     >
 
                         <Gon position-y={-1} position-x={0.2} rotation-y={2.5} scale={[3, 3, 3]} />
@@ -365,6 +361,7 @@ const NFTCard = ({
     texture,
     name,
     color,
+    audio,
     q = new THREE.Quaternion(),
     p = new THREE.Vector3(),
     ...props
@@ -376,7 +373,7 @@ const NFTCard = ({
     const portalMaterial = useRef();
 
     useFrame((_state, delta) => {
-        const worldOpen = active === name;
+        const worldOpen = active === true;
         easing.damp(portalMaterial.current, "blend", worldOpen ? 1 : 0, 0.2, delta);
     });
 
@@ -410,7 +407,9 @@ const NFTCard = ({
                 ref={ref}
                 name={name}
                 args={[9.5, 5, 0.1]}
-                onClick={() => setActive(!active)} onPointerMissed={() => setActive(false)}
+                onClick={() => {
+                    audio.play()
+                }} onPointerMissed={() => setActive(false)}
             >
                 <MeshPortalMaterial ref={portalMaterial} side={THREE.DoubleSide} onClick={() => setActive(!active)} onPointerMissed={() => setActive(false)}
                 >
