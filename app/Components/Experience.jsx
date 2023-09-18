@@ -152,7 +152,7 @@ export const Experience = ({ started }) => {
             step: 1
         },
         fogFar: {
-            value: 30,
+            value: 44,
             min: 1,
             max: 100,
             step: 1
