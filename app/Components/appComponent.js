@@ -147,8 +147,8 @@ export const Subtitles = ({ subtitle, setSubtitle, started }) => {
         2000, // Delay for the second text
         1500, // Delay for the third text
         3000, // Delay for the fourth text
-        1000, // Delay for the fifth text
-        2000, // Delay for the sixth text
+        2000, // Delay for the fifth text
+        3000, // Delay for the sixth text
         1500, // Delay for the seventh text
         3000, // Delay for the eighth text
         4000  // Delay for the ninth text
