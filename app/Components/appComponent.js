@@ -65,7 +65,7 @@ export const LoadingScreeen = ({ started, setStarted, audio }) => {
 
         <div className={`menu col-start-1 col-span-8 row-start-1 transition-all duration-1000 ease-in-out opacity-70 ${started ? 'hidden opacity-0 pointer-events-none' : 'grid self-center '} `}>
 
-            <Image className={`self-center justify-self-center`} src={'/warning.jpg'} height={250} width={400} />
+            <Image alt="Viewer Advised Content" className={`self-center justify-self-center`} src={'/warning.jpg'} height={250} width={400} />
 
             {progress == 100 && loaded &&
                 <button onClick={() => {
