@@ -1,7 +1,11 @@
 import './globals.css'
-import { Inter } from 'next/font/google'
+import { PT_Sans_Caption } from 'next/font/google'
 
-const inter = Inter({ subsets: ['latin'] })
+const sansCaption = PT_Sans_Caption({ 
+  subsets: ['latin'],
+  variable:'--font-subtitle',
+  weight:'400'
+ });
 
 export const metadata = {
   title: '',
@@ -11,7 +15,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={sansCaption.variable}>{children}</body>
     </html>
   )
 }

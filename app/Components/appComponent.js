@@ -19,9 +19,11 @@ export default function AppComponent() {
         // only run once on the first render on the client
     }, [])
 
+    const [subtitle, setSubtitle] = useState('');
+
     return (
         <>
-            <Leva />
+            <Leva hidden />
 
             <Canvas className={`col-start-1 col-span-8 row-start-1`} shadows camera={{ position: [13, 7, 10], fov: 60 }}  >
                 <EffectComposer>
@@ -38,6 +40,8 @@ export default function AppComponent() {
             </Canvas>
 
             <LoadingScreeen audio={audio} started={started} setStarted={setStarted} />
+
+            <Subtitles subtitle={subtitle} setSubtitle={setSubtitle} started={started} />
 
             <Loader />
         </>
@@ -66,6 +70,103 @@ export const LoadingScreeen = ({ started, setStarted, audio }) => {
                 Start
             </button>
 
+        </div>
+    )
+}
+
+export const Subtitles = ({ subtitle, setSubtitle, started }) => {
+
+    // Replace this with your actual transcript
+    const transcript =
+        `00:00:00.10
+        Gon,
+        00:00:01.08
+      
+        00:00:02.06
+        Gon.
+        00:00:03.09
+      
+        00:00:05.14
+        That's good.
+        00:00:06.18
+      
+        00:00:06.24
+        You are so very good.
+        00:00:09.11
+      
+        00:00:09.11
+        Those eyes that look,
+        00:00:13.03
+      
+        00:00:13.04
+        that spirit.
+        00:00:14.19
+      
+        00:00:18.17
+        *Hisoka moaning*: Oh.
+        00:00:19.04`
+
+    let lines = transcript.split('\n').map(line => line.trim());
+
+    // Initialize an array to store objects
+    const objectsArray = [];
+
+    // Iterate through the lines and create objects
+    for (let i = 0; i < lines.length; i += 4) {
+        const timestamp1 = lines[i];
+        const timestamp2 = lines[i + 2];
+
+        // Create an object with title and intervalDifference properties
+        const obj = {
+            title: lines[i + 1], // The text transcript
+            start: timestamp1,
+            end: timestamp2
+        };
+        // Push the object into the array
+        objectsArray.push(obj);
+    }
+
+    console.log(objectsArray);
+
+    const [index, setIndex] = useState(0);
+    
+      const differencesInMilliseconds = [
+        1000, // Delay for the first text
+        2000, // Delay for the second text
+        1500, // Delay for the third text
+        3000, // Delay for the fourth text
+        1000, // Delay for the fifth text
+        2000, // Delay for the sixth text
+        1500, // Delay for the seventh text
+        3000, // Delay for the eighth text
+        1000  // Delay for the ninth text
+      ];
+      
+    const changeParagraph = () => {
+
+        if (!objectsArray[index]) {
+            setSubtitle('');
+            return
+        }
+        else {
+            setSubtitle(objectsArray[index].title);
+            setIndex(index + 1);
+            console.log(objectsArray[index].title)
+        }
+    }
+    const { progress } = useProgress();
+
+    useEffect(() => {
+
+        if (progress == 100 && started) {
+            setTimeout(changeParagraph, differencesInMilliseconds[index]);
+        }
+
+    }, [started, index])
+
+    return (
+        <div className={`col-start-1 col-span-8 row-start-1 self-end justify-self-center transition-all duration-1000 ease-in-out z-[100] bg-[rgb(215,186,223,60%)] w-auto bg-opacity-20 backdrop-blur-lg rounded drop-shadow-lg p-4 px-8 mb-[20px] ${!started || subtitle == '' ? 'hidden opacity-0 pointer-events-none' : 'grid'} `}>
+            <h2 className={` text-xl text-white justify-self-center self-end font-sansCaption transition-all duration-1000 ease-in-out`}> {subtitle} </h2>
         </div>
     )
 }
