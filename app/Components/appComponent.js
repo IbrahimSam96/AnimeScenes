@@ -1,11 +1,13 @@
 'use client'
 
-import { Canvas } from "@react-three/fiber";
+import { Canvas, useFrame} from "@react-three/fiber";
 import { Suspense, useEffect, useState } from "react";
 import { CameraControls, Loader, useProgress } from "@react-three/drei";
 import { Experience } from "./Experience";
-import { Leva } from "leva";
+import { Leva, useControls } from "leva";
+
 import { Bloom, EffectComposer } from "@react-three/postprocessing";
+import Image from "next/image";
 
 
 export default function AppComponent() {
@@ -21,11 +23,17 @@ export default function AppComponent() {
 
     const [subtitle, setSubtitle] = useState('');
 
+    const { startingPosition } = useControls({
+        startingPosition: {
+            value: [13, 7, 9]
+        },
+    })
+
     return (
         <>
             <Leva hidden />
 
-            <Canvas className={`col-start-1 col-span-8 row-start-1`} shadows camera={{ position: [13, 7, 10], fov: 60 }}  >
+            <Canvas className={`col-start-1 col-span-8 row-start-1 bg-black`} shadows camera={{ position: startingPosition, fov: 60 }}  >
                 <EffectComposer>
                     <Bloom
                         mipmapBlur
@@ -51,24 +59,30 @@ export default function AppComponent() {
 
 export const LoadingScreeen = ({ started, setStarted, audio }) => {
 
-    const { progress } = useProgress();
+    const { progress, loaded } = useProgress();
 
     return (
 
-        <div className={`menu col-start-1 col-span-8 row-start-1 transition-all duration-1000 ease-in-out ${started ? 'hidden opacity-0 pointer-events-none' : 'grid'} `}>
+        <div className={`menu col-start-1 col-span-8 row-start-1 transition-all duration-1000 ease-in-out opacity-70 ${started ? 'hidden opacity-0 pointer-events-none' : 'grid self-center '} `}>
 
-            <button onClick={() => {
-                if (progress < 100) {
-                    // Do Nothing
-                }
-                else {
-                    setStarted(true)
-                    audio.play()
-                }
-            }} disabled={progress < 100}
-                className={`bg-[rgb(215,186,223,60%)] px-10 py-6 font-extrabold text-white rounded-[4px] border-none self-center justify-self-center transition-all duration-500 hover:bg-[#fffffff5] hover:text-black hover:cursor-pointer`}>
-                Start
-            </button>
+            <Image className={`self-center justify-self-center`} src={'/warning.jpg'} height={250} width={400} />
+
+            {progress == 100 && loaded &&
+                <button onClick={() => {
+                    if (progress < 100) {
+                        // Do Nothing
+                    }
+                    else {
+                        setStarted(true)
+                        audio.play()
+                    }
+                }} disabled={progress < 100}
+                    className={`bg-[rgb(215,186,223,70%)] px-10 py-6 font-extrabold text-white rounded-[4px] border-none self-center justify-self-center transition-all duration-500 hover:bg-[#fffffff5] hover:text-black hover:cursor-pointer`}>
+                    Start
+                </button>
+
+            }
+
 
         </div>
     )
@@ -126,11 +140,9 @@ export const Subtitles = ({ subtitle, setSubtitle, started }) => {
         objectsArray.push(obj);
     }
 
-    console.log(objectsArray);
-
     const [index, setIndex] = useState(0);
-    
-      const differencesInMilliseconds = [
+
+    const differencesInMilliseconds = [
         1000, // Delay for the first text
         2000, // Delay for the second text
         1500, // Delay for the third text
@@ -139,9 +151,9 @@ export const Subtitles = ({ subtitle, setSubtitle, started }) => {
         2000, // Delay for the sixth text
         1500, // Delay for the seventh text
         3000, // Delay for the eighth text
-        1000  // Delay for the ninth text
-      ];
-      
+        4000  // Delay for the ninth text
+    ];
+
     const changeParagraph = () => {
 
         if (!objectsArray[index]) {
@@ -165,7 +177,7 @@ export const Subtitles = ({ subtitle, setSubtitle, started }) => {
     }, [started, index])
 
     return (
-        <div className={`col-start-1 col-span-8 row-start-1 self-end justify-self-center transition-all duration-1000 ease-in-out z-[100] bg-[rgb(215,186,223,60%)] w-auto bg-opacity-20 backdrop-blur-lg rounded drop-shadow-lg p-4 px-8 mb-[20px] ${!started || subtitle == '' ? 'hidden opacity-0 pointer-events-none' : 'grid'} `}>
+        <div className={`col-start-1 col-span-8 row-start-1 self-end justify-self-center transition-all duration-1000 ease-in-out z-[100] bg-[rgb(215,186,223,60%)] w-auto bg-opacity-20 backdrop-blur-lg rounded drop-shadow-lg p-4 px-8 mb-[60px] ${!started || subtitle == '' ? 'hidden opacity-0 pointer-events-none' : 'grid'} `}>
             <h2 className={` text-xl text-white justify-self-center self-end font-sansCaption transition-all duration-1000 ease-in-out`}> {subtitle} </h2>
         </div>
     )

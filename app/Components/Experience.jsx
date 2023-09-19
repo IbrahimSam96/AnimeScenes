@@ -39,7 +39,7 @@ const RANDOMIZER_STRENGTH_SCALE = 0.42;
 const RANDOMIZER_STRENGTH_POSITION = 1;
 
 
-export const Experience = ({ started }) => {
+export const Experience = ({ started, q = new THREE.Quaternion(), p = new THREE.Vector3()}) => {
 
     const Ground = (props) => {
 
@@ -166,6 +166,7 @@ export const Experience = ({ started }) => {
         characterGroup.current.position.z = -z
     })
 
+
     return (
         <>
             <OrbitControls
@@ -182,6 +183,7 @@ export const Experience = ({ started }) => {
             <ambientLight intensity={0.2} />
             <Environment preset="city" intensity={0.4} blur={0.8} />
             <color attach="background" args={[color]} />
+
             <fog attach="fog" args={[fogColor, fogNear, fogFar]} />
 
             {/* <Water position={[7, -2, 60]}  /> */}
