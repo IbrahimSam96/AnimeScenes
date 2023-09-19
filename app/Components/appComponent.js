@@ -103,7 +103,7 @@ export const Subtitles = ({ subtitle, setSubtitle, started }) => {
         00:00:14.19
       
         00:00:18.17
-        *Hisoka moaning*: Oh.
+        *Hisoka moaning*: Ohhhhh.
         00:00:19.04`
 
     let lines = transcript.split('\n').map(line => line.trim());
