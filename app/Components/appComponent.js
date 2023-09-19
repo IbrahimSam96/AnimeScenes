@@ -25,7 +25,7 @@ export default function AppComponent() {
 
     const { startingPosition } = useControls({
         startingPosition: {
-            value: [13, 7, 9]
+            value: [16, 7, 9]
         },
     })
 
@@ -177,7 +177,7 @@ export const Subtitles = ({ subtitle, setSubtitle, started }) => {
     }, [started, index])
 
     return (
-        <div className={`col-start-1 col-span-8 row-start-1 self-end justify-self-center transition-all duration-1000 ease-in-out z-[100] bg-[rgb(215,186,223,60%)] w-auto bg-opacity-20 backdrop-blur-lg rounded drop-shadow-lg p-4 px-8 mb-[60px] ${!started || subtitle == '' ? 'hidden opacity-0 pointer-events-none' : 'grid'} `}>
+        <div className={`col-start-1 col-span-8 row-start-1 self-end justify-self-center transition-all duration-1000 ease-in-out z-[100] bg-[rgb(215,186,223,60%)] w-auto bg-opacity-20 backdrop-blur-lg rounded drop-shadow-lg p-4 px-8 mb-[100px] ${!started || subtitle == '' ? 'hidden opacity-0 pointer-events-none' : 'grid'} `}>
             <h2 className={` text-xl text-white justify-self-center self-end font-sansCaption transition-all duration-1000 ease-in-out`}> {subtitle} </h2>
         </div>
     )
