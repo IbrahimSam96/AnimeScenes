@@ -25,7 +25,7 @@ export default function AppComponent() {
 
     const { startingPosition } = useControls({
         startingPosition: {
-            value: [16, 7, 9]
+            value: [16, 7, 7]
         },
     })
 
