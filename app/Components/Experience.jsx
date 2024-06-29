@@ -57,8 +57,6 @@ export const Experience = ({
   q = new THREE.Quaternion(),
   p = new THREE.Vector3(),
 }) => {
-  const envMap = useEnvironment({ files: "/presky.hdr" });
-
   const Ground = (props) => {
     // const terrainTextures = useTexture({
     //     map: "textures/Snow_Diff.jpg",
